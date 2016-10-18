@@ -196,3 +196,6 @@ map <Leader>v :write<cr>:sil !/usr/bin/qlmanage -p % > /dev/null &<cr>:redraw!<c
 set guifont=Sauce\ Code\ Powerline:h14
 "autocmd FileType go autocmd BufWritePre <buffer> GoFmt
 set expandtab               " Use spaces, not tabs, for autoindent/tab key.
+
+"NERDTree
+map <C-n> :NERDTreeToggle<CR>
