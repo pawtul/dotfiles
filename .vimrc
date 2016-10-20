@@ -14,6 +14,7 @@ let g:vundle_default_git_proto='git'
 let g:golang_root = '/usr/local/bin'
 
 Plugin 'gmarik/Vundle.vim'
+Plugin 'airblade/vim-gitgutter'
 "Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tomasr/molokai'
