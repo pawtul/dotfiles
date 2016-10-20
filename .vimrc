@@ -1,6 +1,7 @@
 set t_Co=256
 set encoding=utf-8
 set mouse=a
+set colorcolumn=80
 set nocompatible               " be iMproved
 filetype off                   " required!
 set rtp+=~/tools/powerline/powerline/bindings/vim
