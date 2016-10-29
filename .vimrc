@@ -215,6 +215,11 @@ endif
 " Make diffs *really* obvious
 hi DiffText gui=underline guibg=red guifg=black
 
+
+" ==========================================================
+" Plugin Config
+" ==========================================================
+
 " jedi-vim
 let g:jedi#usages_command = "<leader>u"
 let g:jedi#use_splits_not_buffers = "left"
@@ -263,3 +268,14 @@ let g:multi_cursor_quit_key='<Esc>'
 "" vimpy settings
 "let g:vimpy_prompt_resolve = 1
 
+
+" ==========================================================
+" Others
+" ==========================================================
+" highlight extra whitespaces
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
