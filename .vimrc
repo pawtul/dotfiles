@@ -37,6 +37,12 @@ Plugin 'fatih/vim-go'
 Plugin 'Gundo'
 Plugin 'reedes/vim-wordy'
 Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'mileszs/ack.vim'
+Plugin 'Raimondi/delimitMate'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'tmhedberg/SimpylFold'
+"Plugin 'dbsr/vimpy'
+Plugin 'jmcantrell/vim-virtualenv'
 "Plugin 'wting/rust.vim'
 
 call vundle#end()
@@ -52,14 +58,18 @@ cmap W! w !sudo tee % >/dev/null
 map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
 " open/close the quickfix window
-nmap <leader>c :copen<CR>
-nmap <leader>cc :cclose<CR>
+"nmap <leader>c :copen<CR>
+"nmap <leader>cc :cclose<CR>
 
 " ctrl-jklm to navigate between split buffers
 map <c-j> <c-w>j
 map <c-k> <c-w>k
 map <c-l> <c-w>l
 map <c-h> <c-w>h
+
+" navigate between tabs
+map <Leader>n <esc>:tabprevious<CR>
+map <Leader>m <esc>:tabnext<CR>
 
 " and lets make these all work in insert mode too ( <C-O> makes next cmd
 "  happen as if in command mode )
@@ -79,10 +89,23 @@ set number                    " Display line numbers
 set title                     " show title in console title bar
 set wildmenu                  " Menu completion in command mode on <Tab>
 set wildmode=full             " <Tab> cycles between all matching choices.
+set sts=4                     " set Tab to have 4 spaces
+set ts=4                     " set Tab to have 4 spaces
+set sw=4
 
 " don't bell or blink
 set noerrorbells
 set vb t_vb=
+
+"python with virtualenv support
+"py << EOF
+"import os
+"import sys
+"if 'VIRTUAL_ENV' in os.environ:
+  "project_base_dir = os.environ['VIRTUAL_ENV']
+  "activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+  "execfile(activate_this, dict(__file__=activate_this))
+"EOF
 
 " Ignore these files when completing
 set wildignore+=*.o,*.obj,.git,*.pyc
@@ -100,7 +123,8 @@ set virtualedit=block       " Let cursor move past the last char in <C-v> mode
 set scrolloff=3             " Keep 3 context lines above and below the cursor
 set backspace=2             " Allow backspacing over autoindent, EOL, and BOL
 set showmatch               " Briefly jump to a paren once it's balanced
-set wrap                    " Wrap text
+"set wrap                    " Wrap text
+set nowrap                  " don't Wrap text
 set linebreak               " don't wrap textin the middle of a word
 set autoindent              " always set autoindenting on
 set smartindent             " use smart indent if there is no indent file
@@ -110,8 +134,16 @@ set softtabstop=4           " <BS> over an autoindent deletes both spaces.
 set expandtab               " Use spaces, not tabs, for autoindent/tab key.
 set shiftround              " rounds indent to a multiple of shiftwidth
 set formatoptions=tcroql    " Setting text and comment formatting to auto
-set textwidth=120            " Lines are automatically wrapped after 120 columns
+"set textwidth=120            " Lines are automatically wrapped after 120 columns
+set textwidth=0              " Lines are not automatically wrapped
 set linespace=3             " The spacing between lines is a little roomier
+" << >> shift lines
+"vnoremap < <gv              
+"vnoremap > >gv              
+set foldmethod=indent       " folding
+set foldnestmax=10          " folding
+set nofoldenable            " folding
+set foldlevel=99            " folding
 
 """" Reading/Writing
 set autowrite               " Stop complaining about unsaved buffers
@@ -119,15 +151,15 @@ set autowriteall            " I'm serious...
 set noautoread              " Don't automatically re-read changed files.
 set modeline                " Allow vim options to be embedded in files;
 set modelines=5             " they must be within the first or last 5 lines.
-set nofoldenable            " Disable folding, because recently `zO` has been the command I use most frequently
+"set nofoldenable            " Disable folding, because recently `zO` has been the command I use most frequently
 
 """" Messages, Info, Status
 set ls=2                    " allways show status line
-set vb t_vb=                " Disable all bells.  I hate ringing/flashing.
+"set vb t_vb=                " Disable all bells.  I hate ringing/flashing.
 set showcmd                 " Show incomplete normal mode commands as I type.
 set report=0                " : commands always print changed line count.
 set shortmess+=a            " Use [+]/[RO]/[w] for modified/readonly/written.
-set ruler                   " Show some info, even without statuslines.
+"set ruler                   " Show some info, even without statuslines.
 set laststatus=2            " Always show statusline, even if only 1 window.
 
 """ Searching and Patterns
@@ -141,6 +173,7 @@ map <leader>p "+p
 
 " Quit window on <leader>q
 nnoremap <leader>q :q<CR>
+nnoremap <leader>Q :qa!<CR>
 
 " hide matches on <leader>space (rather than searching for something like " 'asdf')
 nnoremap <leader><space> :nohlsearch<cr>
@@ -162,6 +195,8 @@ colorscheme desert
 
 " Don't create swapfiles
 set noswapfile
+set nobackup
+set nowritebackup
 
 " Allow for undo even after closing and re-opening a file
 if exists("+undofile")
@@ -180,6 +215,10 @@ endif
 " Make diffs *really* obvious
 hi DiffText gui=underline guibg=red guifg=black
 
+" jedi-vim
+let g:jedi#usages_command = "<leader>u"
+let g:jedi#use_splits_not_buffers = "left"
+
 " syntastic: show errors from all linters at once
 let g:syntastic_aggregate_errors = 1
 let g:syntastic_always_populate_loc_list = 1
@@ -195,6 +234,12 @@ let g:syntastic_warning_symbol = "⚠"
 
 " Set CtrlP to search by filename rather than path
 let g:ctrlp_by_filename = 0
+let g:ctrlp_max_height = 30
+set wildignore+=*.pyc
+set wildignore+=*build/*
+set wildignore+=*dist/*
+set wildignore+=*.egg-info/*
+set wildignore+=*/coverage/*
 " Preview Markdown files with QuickLook
 map <Leader>v :write<cr>:sil !/usr/bin/qlmanage -p % > /dev/null &<cr>:redraw!<cr>
 set guifont=Sauce\ Code\ Powerline:h14
@@ -203,3 +248,18 @@ set expandtab               " Use spaces, not tabs, for autoindent/tab key.
 
 "NERDTree
 map <C-n> :NERDTreeToggle<CR>
+let NERDTreeIgnore = ['\.pyc$', '\~$', '__pycache__']
+
+" powerline"
+"let g:Powerline_symbols = 'fancy'
+
+" vim-multiple-cursor
+let g:multi_cursor_use_default_mapping=0
+let g:multi_cursor_next_key='<leader>b'
+let g:multi_cursor_prev_key='<leader>x'
+let g:multi_cursor_skip_key='<leader>z'
+let g:multi_cursor_quit_key='<Esc>'
+
+"" vimpy settings
+"let g:vimpy_prompt_resolve = 1
+
