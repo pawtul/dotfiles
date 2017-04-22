@@ -128,7 +128,7 @@ set showmatch               " Briefly jump to a paren once it's balanced
 set nowrap                  " don't Wrap text
 set linebreak               " don't wrap textin the middle of a word
 set autoindent              " always set autoindenting on
-set smartindent             " use smart indent if there is no indent file
+"set smartindent             " use smart indent if there is no indent file
 set tabstop=4               " <tab> inserts 4 spaces
 set shiftwidth=4            " an indent level is 4 spaces wide.
 set softtabstop=4           " <BS> over an autoindent deletes both spaces.
