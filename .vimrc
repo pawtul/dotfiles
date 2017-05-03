@@ -14,7 +14,7 @@ let g:vundle_default_git_proto='git'
 let g:golang_root = '/usr/local/bin'
 
 Plugin 'gmarik/Vundle.vim'
-Plugin 'airblade/vim-gitgutter'
+Plugin 'airblade/vim-gitgutter'  " git integration
 "Plugin 'ekalinin/Dockerfile.vim'
 "Plugin 'tpope/vim-fugitive'
 "Plugin 'tomasr/molokai'
@@ -24,11 +24,11 @@ Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'sjl/gundo.vim'
 "Plugin 'Valloric/YouCompleteMe'
-Plugin 'davidhalter/jedi-vim'
-Plugin 'scrooloose/syntastic'
-Plugin 'scrooloose/nerdtree'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
-Plugin 'scrooloose/nerdcommenter'
+Plugin 'davidhalter/jedi-vim'  " autocomplete
+"Plugin 'scrooloose/syntastic'  " python linting
+Plugin 'scrooloose/nerdtree'   " panel with files
+Plugin 'Xuyuanp/nerdtree-git-plugin'  " git marks for nerdtree
+Plugin 'scrooloose/nerdcommenter'  " commenting
 "Plugin 'altercation/vim-colors-solarized'
 "Plugin 'Lokaltog/vim-distinguished'
 "Plugin 'wincent/Command-T'
@@ -36,15 +36,18 @@ Plugin 'scrooloose/nerdcommenter'
 "Plugin 'vim-scripts/vcscommand.vim'
 "Plugin 'fatih/vim-go'
 "Plugin 'Gundo'
-Plugin 'reedes/vim-wordy'
-Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
-Plugin 'mileszs/ack.vim'
+Plugin 'reedes/vim-wordy'  " spell checking
+Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}  " powerline
+Plugin 'mileszs/ack.vim'  " Ack
 "Plugin 'Raimondi/delimitMate'
 Plugin 'terryma/vim-multiple-cursors'
 "Plugin 'tmhedberg/SimpylFold'
 "Plugin 'dbsr/vimpy'
 Plugin 'jmcantrell/vim-virtualenv'
 "Plugin 'wting/rust.vim'
+Plugin 'w0rp/ale'  " style checking
+Plugin 'fisadev/vim-isort'  " sorting imports
+Plugin 'python-mode/python-mode'
 
 call vundle#end()
 " ==========================================================
@@ -139,8 +142,8 @@ set formatoptions=tcroql    " Setting text and comment formatting to auto
 set textwidth=0              " Lines are not automatically wrapped
 set linespace=3             " The spacing between lines is a little roomier
 " << >> shift lines
-"vnoremap < <gv              
-"vnoremap > >gv              
+"vnoremap < <gv
+"vnoremap > >gv
 set foldmethod=indent       " folding
 set foldnestmax=10          " folding
 set nofoldenable            " folding
@@ -268,6 +271,9 @@ let g:multi_cursor_quit_key='<Esc>'
 
 "" vimpy settings
 "let g:vimpy_prompt_resolve = 1
+
+" w0rp/ale settings
+let g:ale_sign_column_always = 1
 
 
 " ==========================================================
