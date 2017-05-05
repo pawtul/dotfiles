@@ -47,7 +47,7 @@ Plugin 'jmcantrell/vim-virtualenv'
 "Plugin 'wting/rust.vim'
 Plugin 'w0rp/ale'  " style checking
 Plugin 'fisadev/vim-isort'  " sorting imports
-Plugin 'python-mode/python-mode'
+"Plugin 'python-mode/python-mode'  " in conflict with jedi-vim
 
 call vundle#end()
 " ==========================================================
