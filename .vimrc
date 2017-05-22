@@ -25,7 +25,9 @@ Plugin 'plasticboy/vim-markdown'
 Plugin 'sjl/gundo.vim'
 "Plugin 'Valloric/YouCompleteMe'
 Plugin 'davidhalter/jedi-vim'  " autocomplete
-"Plugin 'scrooloose/syntastic'  " python linting
+"Plugin 'python-mode/python-mode'  " in conflict with jedi-vim
+"Plugin 'scrooloose/syntastic'  " style checking
+Plugin 'w0rp/ale'  " style checking
 Plugin 'scrooloose/nerdtree'   " panel with files
 Plugin 'Xuyuanp/nerdtree-git-plugin'  " git marks for nerdtree
 Plugin 'scrooloose/nerdcommenter'  " commenting
@@ -45,9 +47,7 @@ Plugin 'terryma/vim-multiple-cursors'
 "Plugin 'dbsr/vimpy'
 Plugin 'jmcantrell/vim-virtualenv'
 "Plugin 'wting/rust.vim'
-Plugin 'w0rp/ale'  " style checking
 Plugin 'fisadev/vim-isort'  " sorting imports
-"Plugin 'python-mode/python-mode'  " in conflict with jedi-vim
 
 call vundle#end()
 " ==========================================================
