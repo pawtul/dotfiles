@@ -274,9 +274,9 @@ let g:multi_cursor_quit_key='<Esc>'
 
 " w0rp/ale settings
 let g:ale_sign_column_always = 1
-let g:ale_linters = {
-\   'python': ['pylint', 'flake8'],
-\}
+"let g:ale_linters = {
+"\   'python': ['pylint', 'flake8', 'mypy --ignore-missing-imports'],
+"\}
 
 
 " ==========================================================
