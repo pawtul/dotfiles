@@ -1,6 +1,7 @@
 [flake8]
 # W391 - blank line at the end of file
-ignore = E226,E302,E41,W391
+# E126 - continuation line over-intendent for handling indent
+ignore = E226,E302,E41,W391,E126
 max-line-length = 160
 exclude = tests/*
 max-complexity = 10
