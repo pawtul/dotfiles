@@ -174,6 +174,8 @@ set incsearch               " Incrementally search while typing a /regex
 
 " Paste from system clipboard
 map <leader>p "+p
+map <leader>P "+P
+map <leader>y "+y
 
 " Quit window on <leader>q
 nnoremap <leader>q :q<CR>
