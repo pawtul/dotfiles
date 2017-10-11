@@ -18,6 +18,7 @@ Plugin 'airblade/vim-gitgutter'  " git integration
 "Plugin 'ekalinin/Dockerfile.vim'
 "Plugin 'tpope/vim-fugitive'
 "Plugin 'tomasr/molokai'
+Plugin 'morhetz/gruvbox'
 "Plugin 'tpope/vim-repeat'
 Plugin 'kien/ctrlp.vim'
 Plugin 'godlygeek/tabular'
@@ -26,8 +27,7 @@ Plugin 'sjl/gundo.vim'
 "Plugin 'Valloric/YouCompleteMe'
 Plugin 'davidhalter/jedi-vim'  " autocomplete
 "Plugin 'python-mode/python-mode'  " in conflict with jedi-vim
-"Plugin 'scrooloose/syntastic'  " style checking
-Plugin 'w0rp/ale'  " style checking
+"Plugin 'scrooloose/syntastic'  " style checking Plugin 'w0rp/ale'  " style checking
 Plugin 'scrooloose/nerdtree'   " panel with files
 Plugin 'Xuyuanp/nerdtree-git-plugin'  " git marks for nerdtree
 Plugin 'scrooloose/nerdcommenter'  " commenting
@@ -195,7 +195,9 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " I bet 90% of vim users have the following two lines in their .vimrc...
 set background=dark
 "colorscheme solarized
-colorscheme desert
+"colorscheme desert
+colorscheme gruvbox
+"colorscheme molokai
 
 " Don't create swapfiles
 set noswapfile
