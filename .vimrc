@@ -65,6 +65,13 @@ map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimr
 "nmap <leader>c :copen<CR>
 "nmap <leader>cc :cclose<CR>
 
+" resizign splits
+map <leader>> <C-W>>
+map <leader>< <C-W><
+map <leader>+ <C-W>+
+map <leader>- <C-W>-
+
+
 " ctrl-jklm to navigate between split buffers
 map <c-j> <c-w>j
 map <c-k> <c-w>k
@@ -174,6 +181,8 @@ set incsearch               " Incrementally search while typing a /regex
 
 " Paste from system clipboard
 map <leader>p "+p
+map <leader>P "+P
+map <leader>y "+y
 
 " Quit window on <leader>q
 nnoremap <leader>q :q<CR>
