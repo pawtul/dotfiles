@@ -66,10 +66,10 @@ map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimr
 "nmap <leader>cc :cclose<CR>
 
 " resizign splits
-map <leader>> <C-W>>
-map <leader>< <C-W><
-map <leader>+ <C-W>+
-map <leader>- <C-W>-
+map <leader>> 5<C-W>>
+map <leader>< 5<C-W><
+map <leader>+ 5<C-W>+
+map <leader>- 5<C-W>-
 
 
 " ctrl-jklm to navigate between split buffers
