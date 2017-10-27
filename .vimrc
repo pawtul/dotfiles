@@ -27,7 +27,8 @@ Plugin 'sjl/gundo.vim'
 "Plugin 'Valloric/YouCompleteMe'
 Plugin 'davidhalter/jedi-vim'  " autocomplete
 "Plugin 'python-mode/python-mode'  " in conflict with jedi-vim
-"Plugin 'scrooloose/syntastic'  " style checking Plugin 'w0rp/ale'  " style checking
+"Plugin 'scrooloose/syntastic'  " style checking
+Plugin 'w0rp/ale'  " style checking
 Plugin 'scrooloose/nerdtree'   " panel with files
 Plugin 'Xuyuanp/nerdtree-git-plugin'  " git marks for nerdtree
 Plugin 'scrooloose/nerdcommenter'  " commenting
