@@ -23,7 +23,8 @@ Plugin 'morhetz/gruvbox'
 Plugin 'kien/ctrlp.vim'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
-Plugin 'sjl/gundo.vim'
+"Plugin 'sjl/gundo.vim'  " undo tree
+Plugin 'mbbill/undotree'  " undo tree
 "Plugin 'Valloric/YouCompleteMe'
 Plugin 'davidhalter/jedi-vim'  " autocomplete
 "Plugin 'python-mode/python-mode'  " in conflict with jedi-vim
@@ -86,10 +87,6 @@ map <Leader>m <esc>:tabnext<CR>
 " and lets make these all work in insert mode too ( <C-O> makes next cmd
 "  happen as if in command mode )
 imap <C-W> <C-O><C-W>
-
-" Load the Gundo window
-"map <leader>g :GundoToggle<CR>
-nnoremap <F5> :GundoToggle<CR>
 
 " ==========================================================
 " Basic Settings
@@ -235,6 +232,14 @@ hi DiffText gui=underline guibg=red guifg=black
 " ==========================================================
 " Plugin Config
 " ==========================================================
+
+" Gundo
+" Load the Gundo window
+"map <leader>g :GundoToggle<CR>
+"nnoremap <F5> :GundoToggle<CR>
+
+" UndoTree
+nnoremap <F5> :UndotreeToggle<cr>
 
 " jedi-vim
 let g:jedi#usages_command = "<leader>u"
