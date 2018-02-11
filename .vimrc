@@ -51,6 +51,15 @@ Plugin 'jmcantrell/vim-virtualenv'
 "Plugin 'wting/rust.vim'
 Plugin 'fisadev/vim-isort'  " sorting imports
 
+"dodatkowe pluginy
+Plugin 'majutsushi/tagbar'
+Plugin 'BufOnly.vim'
+Plugin 'wesQ3/vim-windowswap'
+Plugin 'gilsondev/searchtasks.vim'
+Plugin 'jakedouglas/exuberant-ctags'
+Plugin 'reedes/vim-pencil'
+
+
 call vundle#end()
 " ==========================================================
 " Shortcuts
@@ -295,6 +304,9 @@ let g:ale_sign_column_always = 1
 let g:ale_linters = {
 \   'python': ['pylint', 'flake8'],
 \}
+
+" tagbar
+nmap <F8> :TagbarToggle<CR>
 
 
 " ==========================================================
