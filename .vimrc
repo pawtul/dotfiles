@@ -30,6 +30,7 @@ Plugin 'davidhalter/jedi-vim'  " autocomplete
 "Plugin 'python-mode/python-mode'  " in conflict with jedi-vim
 "Plugin 'scrooloose/syntastic'  " style checking
 Plugin 'w0rp/ale'  " style checking
+Plugin 'tell-k/vim-autopep8'  " automatic linting
 Plugin 'scrooloose/nerdtree'   " panel with files
 Plugin 'Xuyuanp/nerdtree-git-plugin'  " git marks for nerdtree
 Plugin 'scrooloose/nerdcommenter'  " commenting
