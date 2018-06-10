@@ -57,7 +57,7 @@ Plugin 'majutsushi/tagbar'
 Plugin 'BufOnly.vim'
 Plugin 'wesQ3/vim-windowswap'
 Plugin 'gilsondev/searchtasks.vim'
-Plugin 'jakedouglas/exuberant-ctags'
+Plugin 'rentalcustard/exuberant-ctags'
 Plugin 'reedes/vim-pencil'
 
 
