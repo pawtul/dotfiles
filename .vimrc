@@ -6,6 +6,7 @@ set nocompatible               " be iMproved
 filetype off                   " required!
 set rtp+=~/tools/powerline/powerline/bindings/vim
 set rtp+=~/.vim/bundle/Vundle.vim
+
 call vundle#begin()
 let g:vundle_default_git_proto='git'
 let g:ycm_server_keep_logfiles = 1
@@ -59,6 +60,9 @@ Plugin 'wesQ3/vim-windowswap'
 Plugin 'gilsondev/searchtasks.vim'
 Plugin 'rentalcustard/exuberant-ctags'
 Plugin 'reedes/vim-pencil'
+
+Plugin 'SirVer/ultisnips'  " code snippets for python
+Plugin 'honza/vim-snippets'  " dependency for ultisnips
 
 
 call vundle#end()
@@ -307,6 +311,13 @@ let g:ale_linters = {
 
 " tagbar
 nmap <F8> :TagbarToggle<CR>
+
+
+" ultisnips
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsEditSplit="vertical""
 
 
 " ==========================================================
