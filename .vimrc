@@ -6,7 +6,6 @@ set nocompatible               " be iMproved
 filetype off                   " required!
 set rtp+=~/tools/powerline/powerline/bindings/vim
 set rtp+=~/.vim/bundle/Vundle.vim
-
 call vundle#begin()
 let g:vundle_default_git_proto='git'
 let g:ycm_server_keep_logfiles = 1
@@ -61,8 +60,9 @@ Plugin 'gilsondev/searchtasks.vim'
 Plugin 'rentalcustard/exuberant-ctags'
 Plugin 'reedes/vim-pencil'
 
-Plugin 'SirVer/ultisnips'  " code snippets for python
-Plugin 'honza/vim-snippets'  " dependency for ultisnips
+" snipety
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
 
 
 call vundle#end()
@@ -192,6 +192,7 @@ set hlsearch                " Highlight searches by default.
 set incsearch               " Incrementally search while typing a /regex
 
 " Paste from system clipboard
+set clipboard=unnamed
 map <leader>p "+p
 map <leader>P "+P
 map <leader>y "+y
@@ -218,7 +219,8 @@ set background=dark
 "colorscheme solarized
 "colorscheme desert
 colorscheme gruvbox
-"colorscheme molokai
+"colorscheme monokai
+"colorscheme darcula
 
 " Don't create swapfiles
 set noswapfile
@@ -312,12 +314,10 @@ let g:ale_linters = {
 " tagbar
 nmap <F8> :TagbarToggle<CR>
 
-
-" ultisnips
+" snippety
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-let g:UltiSnipsEditSplit="vertical""
 
 
 " ==========================================================
