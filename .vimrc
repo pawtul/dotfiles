@@ -2,10 +2,18 @@ set t_Co=256
 set encoding=utf-8
 set mouse=a
 set colorcolumn=80
+set synmaxcol=0  " don't limit syntax coloring length
 set nocompatible               " be iMproved
 filetype off                   " required!
 set rtp+=~/tools/powerline/powerline/bindings/vim
 set rtp+=~/.vim/bundle/Vundle.vim
+
+" windowswap
+let g:windowswap_map_keys = 0 "prevent default bindings
+nnoremap <silent> <leader>yw :call WindowSwap#MarkWindowSwap()<CR>
+nnoremap <silent> <leader>pw :call WindowSwap#DoWindowSwap()<CR>
+nnoremap <silent> <leader>ww :call WindowSwap#EasyWindowSwap()<CR>
+
 call vundle#begin()
 let g:vundle_default_git_proto='git'
 let g:ycm_server_keep_logfiles = 1
@@ -13,10 +21,12 @@ let g:ycm_server_log_level = 'debug'
 let g:vundle_default_git_proto='git'
 let g:golang_root = '/usr/local/bin'
 
+Plugin 'junegunn/fzf'
+"Plugin 'Yggdroot/LeaderF'
 Plugin 'gmarik/Vundle.vim'
 Plugin 'airblade/vim-gitgutter'  " git integration
 "Plugin 'ekalinin/Dockerfile.vim'
-"Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-fugitive'
 "Plugin 'tomasr/molokai'
 Plugin 'morhetz/gruvbox'
 "Plugin 'tpope/vim-repeat'
@@ -27,9 +37,10 @@ Plugin 'plasticboy/vim-markdown'
 Plugin 'mbbill/undotree'  " undo tree
 "Plugin 'Valloric/YouCompleteMe'
 Plugin 'davidhalter/jedi-vim'  " autocomplete
-"Plugin 'python-mode/python-mode'  " in conflict with jedi-vim
+"Plugin 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }  " in conflict with jedi-vim
 "Plugin 'scrooloose/syntastic'  " style checking
 Plugin 'w0rp/ale'  " style checking
+Plugin 'martinda/Jenkinsfile-vim-syntax'  " Jenkinsfile syntax
 Plugin 'tell-k/vim-autopep8'  " automatic linting
 Plugin 'scrooloose/nerdtree'   " panel with files
 Plugin 'Xuyuanp/nerdtree-git-plugin'  " git marks for nerdtree
@@ -45,7 +56,7 @@ Plugin 'reedes/vim-wordy'  " spell checking
 Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}  " powerline
 Plugin 'mileszs/ack.vim'  " Ack
 "Plugin 'Raimondi/delimitMate'
-Plugin 'terryma/vim-multiple-cursors'
+"Plugin 'terryma/vim-multiple-cursors'
 "Plugin 'tmhedberg/SimpylFold'
 "Plugin 'dbsr/vimpy'
 Plugin 'jmcantrell/vim-virtualenv'
@@ -59,6 +70,9 @@ Plugin 'wesQ3/vim-windowswap'
 Plugin 'gilsondev/searchtasks.vim'
 Plugin 'rentalcustard/exuberant-ctags'
 Plugin 'reedes/vim-pencil'
+
+" YAML
+Plugin 'chase/vim-ansible-yaml'
 
 " snipety
 Plugin 'SirVer/ultisnips'
@@ -260,6 +274,7 @@ nnoremap <F5> :UndotreeToggle<cr>
 " jedi-vim
 let g:jedi#usages_command = "<leader>u"
 let g:jedi#use_splits_not_buffers = "left"
+let g:jedi#smart_auto_mappings = 1
 
 " syntastic: show errors from all linters at once
 let g:syntastic_aggregate_errors = 1
@@ -294,6 +309,32 @@ let NERDTreeIgnore = ['\.pyc$', '\~$', '__pycache__']
 
 " powerline"
 "let g:Powerline_symbols = 'fancy'
+
+" python-mode
+"let g:pymode_run_bind = '<leader>r'
+let g:pymode_run_bind = '<Nop>'
+let g:pymode_breakpoint_bind = '<leader>b'
+let g:pymode_rope_show_doc_bind = '<leader>pd'
+let g:pymode_rope_find_it_bind='<leader>u'
+let g:pymode_rope_goto_definition_bind = '<leader>pg'
+let g:pymode_rope_goto_definition_cmd = 'vnew'
+let g:pymode_rope_rename_bind = '<leader>pr'
+let g:pymode_rope_module_to_package_bind = '<leader>p1p'
+let g:pymode_rope_extract_method_bind = '<leader>pm'
+let g:pymode_rope_extract_variable_bind = '<leader>pl'
+let g:pymode_rope_use_function_bind = '<leader>pu'
+let g:pymode_rope_move_bind = '<leader>pv'
+let g:pymode_rope_change_signature_bind = '<leader>ps'
+let g:pymode_lint=0
+let g:pymode_lint_async=0
+let g:pymode_lint_on_write=0
+let g:pymode_lint_message=0
+let g:pymode_python = 'python3'
+
+let g:pymode_rope=0
+let g:pymode_rope_autoimport=1
+let g:pymode_rope_autoimport_import_after_complete=1
+
 
 " vim-multiple-cursor
 let g:multi_cursor_use_default_mapping=0
