@@ -119,3 +119,6 @@ source $HOME/.local/bin/virtualenvwrapper.sh
 
 bindkey "^P" up-line-or-beginning-search
 bindkey "^N" down-line-or-beginning-search
+
+alias dr="dirs -v"
+alias pd="pushd"
