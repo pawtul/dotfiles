@@ -40,6 +40,7 @@ Plugin 'davidhalter/jedi-vim'  " autocomplete
 "Plugin 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }  " in conflict with jedi-vim
 "Plugin 'scrooloose/syntastic'  " style checking
 Plugin 'w0rp/ale'  " style checking
+Plugin 'psf/black', { 'for': 'python' }
 Plugin 'martinda/Jenkinsfile-vim-syntax'  " Jenkinsfile syntax
 Plugin 'tell-k/vim-autopep8'  " automatic linting
 Plugin 'scrooloose/nerdtree'   " panel with files
@@ -115,6 +116,11 @@ map <Leader>m <esc>:tabnext<CR>
 " and lets make these all work in insert mode too ( <C-O> makes next cmd
 "  happen as if in command mode )
 imap <C-W> <C-O><C-W>
+
+" ==========================================================
+" Aliases
+" ==========================================================
+cnoreabbrev ntf NERDTreeFind
 
 " ==========================================================
 " Basic Settings
@@ -262,6 +268,13 @@ hi DiffText gui=underline guibg=red guifg=black
 " ==========================================================
 " Plugin Config
 " ==========================================================
+
+" Black
+nnoremap <leader>b :Black<CR>
+
+" Isort
+nnoremap <leader>i :Isort<CR>
+
 
 " Gundo
 " Load the Gundo window
