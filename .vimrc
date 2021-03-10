@@ -367,6 +367,7 @@ let g:ale_linters = {
 
 " tagbar
 nmap <F8> :TagbarToggle<CR>
+let g:tagbar_position='rightbelow vertical'
 
 " snippety
 let g:UltiSnipsExpandTrigger="<tab>"
