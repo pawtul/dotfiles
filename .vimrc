@@ -40,7 +40,7 @@ Plugin 'davidhalter/jedi-vim'  " autocomplete
 "Plugin 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }  " in conflict with jedi-vim
 "Plugin 'scrooloose/syntastic'  " style checking
 Plugin 'w0rp/ale'  " style checking
-Plugin 'psf/black', { 'for': 'python' }
+Plugin 'psf/black', { 'branch': 'stable' }
 Plugin 'martinda/Jenkinsfile-vim-syntax'  " Jenkinsfile syntax
 Plugin 'tell-k/vim-autopep8'  " automatic linting
 Plugin 'scrooloose/nerdtree'   " panel with files
