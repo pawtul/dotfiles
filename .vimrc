@@ -63,6 +63,7 @@ Plugin 'mileszs/ack.vim'  " Ack
 Plugin 'jmcantrell/vim-virtualenv'
 "Plugin 'wting/rust.vim'
 Plugin 'fisadev/vim-isort'  " sorting imports
+Plugin 'wookayin/vim-autoimport'  " autoimports
 
 "dodatkowe pluginy
 Plugin 'majutsushi/tagbar'
@@ -356,6 +357,10 @@ let g:multi_cursor_prev_key='<leader>x'
 let g:multi_cursor_skip_key='<leader>z'
 let g:multi_cursor_quit_key='<Esc>'
 
+" vim autoimport settings
+nmap <C-i> :ImportSymbol<CR>
+imap <C-i> <Esc>:ImportSymbol<CR>
+
 "" vimpy settings
 "let g:vimpy_prompt_resolve = 1
 
@@ -387,4 +392,4 @@ autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
 " run shell command from selected text
-vnoremap <leader>x "+y:r! <C-R>"<CR>
+vnoremap <leader>x "zy:r! <C-R>"<CR>
