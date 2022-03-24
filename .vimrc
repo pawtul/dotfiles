@@ -15,10 +15,9 @@ nnoremap <silent> <leader>pw :call WindowSwap#DoWindowSwap()<CR>
 nnoremap <silent> <leader>ww :call WindowSwap#EasyWindowSwap()<CR>
 
 call vundle#begin()
-let g:vundle_default_git_proto='git'
+"let g:vundle_default_git_proto='git'
 let g:ycm_server_keep_logfiles = 1
 let g:ycm_server_log_level = 'debug'
-let g:vundle_default_git_proto='git'
 let g:golang_root = '/usr/local/bin'
 
 Plugin 'junegunn/fzf'
