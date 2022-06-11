@@ -271,6 +271,7 @@ hi DiffText gui=underline guibg=red guifg=black
 
 " Black
 nnoremap <leader>b :Black<CR>
+let g:black_virtualenv = $VIRTUAL_ENV
 
 " Isort
 nnoremap <leader>i :Isort<CR>
