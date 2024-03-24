@@ -34,8 +34,9 @@ Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 "Plugin 'sjl/gundo.vim'  " undo tree
 Plugin 'mbbill/undotree'  " undo tree
-"Plugin 'Valloric/YouCompleteMe'
-Plugin 'davidhalter/jedi-vim'  " autocomplete
+Plugin 'Valloric/YouCompleteMe'
+"Plugin 'davidhalter/jedi-vim'   " autocomplete
+Plugin 'github/copilot.vim'
 "Plugin 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }  " in conflict with jedi-vim
 "Plugin 'scrooloose/syntastic'  " style checking
 Plugin 'w0rp/ale'  " style checking
@@ -69,7 +70,8 @@ Plugin 'majutsushi/tagbar'
 Plugin 'BufOnly.vim'
 Plugin 'wesQ3/vim-windowswap'
 Plugin 'gilsondev/searchtasks.vim'
-Plugin 'rentalcustard/exuberant-ctags'
+"Plugin 'rentalcustard/exuberant-ctags'
+Plugin 'craigemery/vim-autotag'
 Plugin 'reedes/vim-pencil'
 
 " YAML
@@ -270,8 +272,15 @@ hi DiffText gui=underline guibg=red guifg=black
 " ==========================================================
 
 " Black
-nnoremap <leader>b :Black<CR>
-let g:black_virtualenv = $VIRTUAL_ENV
+"nnoremap <leader>b :Black<CR>
+"let g:black_virtualenv = $VIRTUAL_ENV
+
+
+"YouCompleteMe
+nnoremap <leader>b :YcmCompleter Format<CR>
+nnoremap <leader>d :aboveleft vertical YcmCompleter GoToDefinition<CR>
+nnoremap <leader>b :aboveleft vertical YcmCompleter GoToImplementation<CR>
+let g:ycm_goto_buffer_command = 'split'
 
 " Isort
 nnoremap <leader>i :Isort<CR>
