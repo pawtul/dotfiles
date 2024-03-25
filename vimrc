@@ -278,8 +278,8 @@ hi DiffText gui=underline guibg=red guifg=black
 
 "YouCompleteMe
 nnoremap <leader>b :YcmCompleter Format<CR>
-nnoremap <leader>d :aboveleft vertical YcmCompleter GoToDefinition<CR>
-nnoremap <leader>b :aboveleft vertical YcmCompleter GoToImplementation<CR>
+nnoremap <leader>g :aboveleft vertical YcmCompleter GoToDefinition<CR>
+nnoremap <leader>d :aboveleft vertical YcmCompleter GoToImplementation<CR>
 let g:ycm_goto_buffer_command = 'split'
 
 " Isort
