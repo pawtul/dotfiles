@@ -35,7 +35,7 @@ Plugin 'plasticboy/vim-markdown'
 "Plugin 'sjl/gundo.vim'  " undo tree
 Plugin 'mbbill/undotree'  " undo tree
 Plugin 'Valloric/YouCompleteMe'
-"Plugin 'davidhalter/jedi-vim'   " autocomplete
+Plugin 'davidhalter/jedi-vim'   " autocomplete
 Plugin 'github/copilot.vim'
 "Plugin 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }  " in conflict with jedi-vim
 "Plugin 'scrooloose/syntastic'  " style checking
@@ -272,15 +272,15 @@ hi DiffText gui=underline guibg=red guifg=black
 " ==========================================================
 
 " Black
-"nnoremap <leader>b :Black<CR>
+nnoremap <leader>b :Black<CR>
 "let g:black_virtualenv = $VIRTUAL_ENV
 
 
 "YouCompleteMe
-nnoremap <leader>b :YcmCompleter Format<CR>
-nnoremap <leader>g :aboveleft vertical YcmCompleter GoToDefinition<CR>
-nnoremap <leader>d :aboveleft vertical YcmCompleter GoToImplementation<CR>
-let g:ycm_goto_buffer_command = 'split'
+"nnoremap <leader>b :YcmCompleter Format<CR>
+"nnoremap <leader>d :aboveleft vertical YcmCompleter GoToDefinition<CR>
+"nnoremap <leader>g :aboveleft vertical YcmCompleter GoToImplementation<CR>
+"let g:ycm_goto_buffer_command = 'split'
 
 " Isort
 nnoremap <leader>i :Isort<CR>
@@ -298,6 +298,7 @@ nnoremap <F5> :UndotreeToggle<cr>
 let g:jedi#usages_command = "<leader>u"
 let g:jedi#use_splits_not_buffers = "left"
 let g:jedi#smart_auto_mappings = 1
+let g:jedi#completions_enabled = 0
 
 " syntastic: show errors from all linters at once
 let g:syntastic_aggregate_errors = 1
