@@ -21,6 +21,7 @@ let g:ycm_server_log_level = 'debug'
 let g:golang_root = '/usr/local/bin'
 
 Plugin 'junegunn/fzf'
+Plugin 'pangloss/vim-javascript'
 "Plugin 'Yggdroot/LeaderF'
 Plugin 'gmarik/Vundle.vim'
 Plugin 'airblade/vim-gitgutter'  " git integration
@@ -403,3 +404,6 @@ autocmd BufWinLeave * call clearmatches()
 
 " run shell command from selected text
 vnoremap <leader>x "zy:r! <C-R>"<CR>
+
+" reload file
+nmap <leader>e :e!<CR>
