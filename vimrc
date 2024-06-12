@@ -35,7 +35,7 @@ Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 "Plugin 'sjl/gundo.vim'  " undo tree
 Plugin 'mbbill/undotree'  " undo tree
-Plugin 'Valloric/YouCompleteMe'
+"Plugin 'Valloric/YouCompleteMe'
 Plugin 'davidhalter/jedi-vim'   " autocomplete
 Plugin 'github/copilot.vim'
 "Plugin 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }  " in conflict with jedi-vim
@@ -299,7 +299,7 @@ nnoremap <F5> :UndotreeToggle<cr>
 let g:jedi#usages_command = "<leader>u"
 let g:jedi#use_splits_not_buffers = "left"
 let g:jedi#smart_auto_mappings = 1
-let g:jedi#completions_enabled = 0
+let g:jedi#completions_enabled = 1
 
 " syntastic: show errors from all linters at once
 let g:syntastic_aggregate_errors = 1
@@ -377,6 +377,7 @@ imap <C-i> <Esc>:ImportSymbol<CR>
 
 " w0rp/ale settings
 let g:ale_sign_column_always = 1
+let g:ale_virtualtest_cursor = 0
 let g:ale_linters = {
 \   'python': ['pylint', 'flake8'],
 \}
