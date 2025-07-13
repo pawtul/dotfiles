@@ -30,11 +30,14 @@ require('pckr').add{
   {'nvim-telescope/telescope.nvim', tag = '0.1.8'};
   'davidhalter/jedi-vim';
   'airblade/vim-gitgutter';
+  'tpope/vim-fugitive';
+  { "stevanmilic/nvim-lspimport" };
+  'neovim/nvim-lspconfig';
 
   --'sainnhe/gruvbox-material';
    'morhetz/gruvbox';
 
-  'github/copilot.vim';
+  --'github/copilot.vim';
   'dense-analysis/ale';
   {'psf/black', branch = 'stable'};
   'scrooloose/nerdcommenter';
@@ -45,6 +48,9 @@ require('pckr').add{
   'honza/vim-snippets';
   'dcampos/nvim-snippy';
   'wesQ3/vim-windowswap';
+
+  'majutsushi/tagbar';
+  'craigemery/vim-autotag';
 }
 
 
@@ -56,6 +62,9 @@ require('nvim-tree').setup()
 -- Basic Settings
 -- ==========================================================
 vim.g.mapleader = ","
+
+vim.cmd [[ cnoremap <C-p> <Up> ]]
+vim.cmd [[ cnoremap <C-n> <Down> ]]
 
 vim.api.nvim_win_set_option(0, 'number', true)  -- Display line numbers
 vim.api.nvim_win_set_option(0, 'title', true)  -- show title in console title bar
@@ -85,7 +94,7 @@ vim.api.nvim_win_set_option(0, 'modeline', true)  -- Allow vim options to be emb
 vim.api.nvim_win_set_option(0, 'swapfile', false)
 vim.api.nvim_win_set_option(0, 'wrap', false)
 vim.api.nvim_win_set_option(0, 'undofile', true)
-vim.cmd [[ setlocal spell spelllang=en_us ]]
+vim.cmd [[ set spell ]]
 
 -- Messages, Info, Status
 vim.api.nvim_set_option('ls', 2)  -- allways show status line
@@ -107,6 +116,7 @@ vim.api.nvim_set_keymap('', '<leader>y', '"+y', {})
 
 vim.cmd [[ nnoremap <leader>q :q<CR> ]]
 vim.cmd [[ nnoremap <leader>Q :qa!<CR> ]]
+vim.cmd [[ nnoremap <leader>e :e!<CR> ]]
 
 vim.api.nvim_set_keymap('n', '<leader><space>', ':nohlsearch<CR>', { noremap = true, silent = true })
 
@@ -163,6 +173,13 @@ vim.api.nvim_set_keymap('', '<C-n>', ':NvimTreeToggle<CR>', {})
 
 -- Telescope
 require('telescope').setup({
+  defaults = {
+    mappings = {
+      n = {
+    	  ['d'] = require('telescope.actions').delete_buffer
+      }
+    } -- mappings
+  },
   pickers = {
     grep_string = {
       theme = "dropdown",
@@ -195,10 +212,18 @@ vim.g['jedi#completions_enabled'] = 1
 -- ale
 vim.g.ale_sign_column_always = 1
 vim.g.ale_virtualtext_cursor = 0
-vim.g.ale_linters = {python= {'pyright'}}
+vim.g.ale_linters = {
+    python= {'pylint', 'pyright'},
+    sh = {'language-server'}
+}
 
 -- black
 vim.api.nvim_set_keymap('n', '<leader>b', ':Black<CR>', { noremap = true })
+
+
+-- bash
+require 'lspconfig'.bashls.setup {}
+
 
 -- snippy
 
@@ -227,3 +252,11 @@ vim.g.airline_extensions = {'branch'}
 vim.g.airline_section_x = ''
 vim.g.airline_section_y = ''
 vim.g.airline_section_z = ''
+
+-- autoimport
+vim.keymap.set("n", "<leader>a", require("lspimport").import, { noremap = true })
+
+-- tagbar
+vim.api.nvim_set_keymap('n', '<F8>', ':TagbarToggle<CR>', { noremap = true })
+vim.g.tagbar_position = 'rightbelow vertical'
+
