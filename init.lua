@@ -1,68 +1,282 @@
+vim.g.mapleader = ","
+vim.g.maplocalleader = "\\"
+
 -- =======
 -- PLUGINS
 -- =======
-
-local function bootstrap_pckr()
-  local pckr_path = vim.fn.stdpath("data") .. "/pckr/pckr.nvim"
-
-  if not (vim.uv or vim.loop).fs_stat(pckr_path) then
-    vim.fn.system({
-      'git',
-      'clone',
-      "--filter=blob:none",
-      'https://github.com/lewis6991/pckr.nvim',
-      pckr_path
-    })
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
   end
-
-  vim.opt.rtp:prepend(pckr_path)
 end
-
-bootstrap_pckr()
-
-require('pckr').add{
-  -- My plugins here
-  'nvim-tree/nvim-web-devicons';
-  'nvim-tree/nvim-tree.lua';
-  'debugloop/telescope-undo.nvim';  -- for telescope
-  'nvim-lua/plenary.nvim';  -- for telescope
-  'nvim-treesitter/nvim-treesitter';  -- for telescope
-  {'nvim-telescope/telescope.nvim', tag = '0.1.8'};
-  'davidhalter/jedi-vim';
-  'airblade/vim-gitgutter';
-  'tpope/vim-fugitive';
-  { "stevanmilic/nvim-lspimport" };
-  'neovim/nvim-lspconfig';
-
-  --'sainnhe/gruvbox-material';
-   'morhetz/gruvbox';
-
-  --'github/copilot.vim';
-  'dense-analysis/ale';
-  {'psf/black', branch = 'stable'};
-  'scrooloose/nerdcommenter';
-  'vim-airline/vim-airline';
-  'vim-airline/vim-airline-themes';
-  'fisadev/vim-isort';
-  'SirVer/ultisnips';
-  'honza/vim-snippets';
-  'dcampos/nvim-snippy';
-  'wesQ3/vim-windowswap';
-
-  'majutsushi/tagbar';
-  'craigemery/vim-autotag';
-}
+vim.opt.rtp:prepend(lazypath)
 
 
-require('nvim-tree').setup()
+-- Setup lazy.nvim
+require("lazy").setup({
+  spec = {
+    {'morhetz/gruvbox'},
+    {'nvim-tree/nvim-web-devicons'},
+    {'nvim-lua/plenary.nvim'},
+    {
+      'nvim-tree/nvim-tree.lua',
+      opts = {
+        sort = {
+          sorter = "case_sensitive",
+        },
+        view = {
+          width = 30,
+        },
+        renderer = {
+          group_empty = true,
+        },
+        filters = {
+          dotfiles = true,
+        },
+      }
+    },
+    {'debugloop/telescope-undo.nvim'},
+    {
+      "nvim-treesitter/nvim-treesitter",
+      branch = 'master',
+      lazy = false,
+      build = ":TSUpdate",
+      ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "bash", },
+      --auto_install = false,
+    },
+    {
+      'nvim-telescope/telescope.nvim', tag = '0.1.8',
+      lazy = false,
+      dependencies = { 'nvim-lua/plenary.nvim' },
+      opts = {
+        defaults = {
+          mappings = {
+            n = {
+               ['d'] = 'delete_buffer'
+            }
+          } -- mappings
+        },
+        pickers = {
+          grep_string = {
+            theme = "dropdown",
+            layout_config={width=0.8}
+          },
+          live_grep = {
+            theme = "dropdown",
+            layout_config={width=0.8}
+          },
+          find_files = {
+            layout_config={width=0.8}
+          },
+          buffers = {
+            layout_config={width=0.8}
+          },
+        }
+      }
+    },
+    {
+      'davidhalter/jedi-vim',
+      ft = { 'python' },
+    },
+    {'airblade/vim-gitgutter'},
+    {'tpope/vim-fugitive'},
+    {'stevanmilic/nvim-lspimport'},
+    {'neovim/nvim-lspconfig'},
+    {'github/copilot.vim'},
+    {
+      "olimorris/codecompanion.nvim",
+      opts = {
+        extensions = {
+          mcphub = {
+            callback = "mcphub.extensions.codecompanion",
+            opts = {
+              make_vars = true,
+              make_slash_commands = true,
+              show_result_in_chat = true
+            }
+          },
 
+          history = {
+            enabled = true,
+            opts = {
+              -- Keymap to open history from chat buffer (default: gh)
+              keymap = "gh",
+              -- Keymap to save the current chat manually (when auto_save is disabled)
+              save_chat_keymap = "sc",
+              -- Save all chats by default (disable to save only manually using 'sc')
+              auto_save = true,
+              -- Number of days after which chats are automatically deleted (0 to disable)
+              expiration_days = 0,
+              -- Picker interface (auto resolved to a valid picker)
+              picker = "telescope", --- ("telescope", "snacks", "fzf-lua", or "default")
+              ---Optional filter function to control which chats are shown when browsing
+              chat_filter = nil, -- function(chat_data) return boolean end
+              -- Customize picker keymaps (optional)
+              picker_keymaps = {
+                  rename = { n = "r", i = "<M-r>" },
+                  delete = { n = "d", i = "<M-d>" },
+                  duplicate = { n = "<C-y>", i = "<C-y>" },
+              },
+              ---Automatically generate titles for new chats
+              auto_generate_title = true,
+              title_generation_opts = {
+                ---Adapter for generating titles (defaults to current chat adapter)
+                adapter = nil, -- "copilot"
+                ---Model for generating titles (defaults to current chat model)
+                model = nil, -- "gpt-4o"
+                ---Number of user prompts after which to refresh the title (0 to disable)
+                refresh_every_n_prompts = 0, -- e.g., 3 to refresh after every 3rd user prompt
+                ---Maximum number of times to refresh the title (default: 3)
+                max_refreshes = 3,
+                format_title = function(original_title)
+                    -- this can be a custom function that applies some custom
+                    -- formatting to the title.
+                    return original_title
+                end
+              },
+              ---On exiting and entering neovim, loads the last chat on opening chat
+              continue_last_chat = false,
+              ---When chat is cleared with `gx` delete the chat from history
+              delete_on_clearing_chat = false,
+              ---Directory path to save the chats
+              dir_to_save = vim.fn.stdpath("data") .. "/codecompanion-history",
+              ---Enable detailed logging for history extension
+              enable_logging = false,
+
+              -- Summary system
+              summary = {
+                -- Keymap to generate summary for current chat (default: "gcs")
+                create_summary_keymap = "gcs",
+                -- Keymap to browse summaries (default: "gbs")
+                browse_summaries_keymap = "gbs",
+               
+                generation_opts = {
+                  adapter = nil, -- defaults to current chat adapter
+                  model = nil, -- defaults to current chat model
+                  context_size = 90000, -- max tokens that the model supports
+                  include_references = true, -- include slash command content
+                  include_tool_outputs = true, -- include tool execution results
+                  system_prompt = nil, -- custom system prompt (string or function)
+                  format_summary = nil, -- custom function to format generated summary e.g to remove <think/> tags from summary
+                },
+              },
+             
+              -- Memory system (requires VectorCode CLI)
+              memory = {
+                -- Automatically index summaries when they are generated
+                auto_create_memories_on_summary_generation = true,
+                -- Path to the VectorCode executable
+                vectorcode_exe = "vectorcode",
+                -- Tool configuration
+                tool_opts = {
+                    -- Default number of memories to retrieve
+                    default_num = 10
+                },
+                -- Enable notifications for indexing progress
+                notify = true,
+                -- Index all existing memories on startup
+                -- (requires VectorCode 0.6.12+ for efficient incremental indexing)
+                index_on_startup = false,
+              },
+            }
+          },
+        }
+      },
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-treesitter/nvim-treesitter",
+        "ravitemer/codecompanion-history.nvim",
+        "MeanderingProgrammer/render-markdown.nvim",
+      },
+    },
+    {
+      "Davidyz/VectorCode",
+      version = "*", -- optional, depending on whether you're on nightly or release
+      dependencies = { "nvim-lua/plenary.nvim" },
+      cmd = "VectorCode", -- if you're lazy-loading VectorCode
+    },
+    {
+      "MeanderingProgrammer/render-markdown.nvim", -- Enhanced markdown rendering
+      enabled = true,
+      dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons", "echasnovski/mini.nvim" },
+      ft = { "markdown", "codecompanion" },
+      opts = {},
+    },
+    {
+      "ravitemer/mcphub.nvim",
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+      },
+      build = "npm install -g mcp-hub@latest",  -- Installs `mcp-hub` node binary globally
+      opts = {}
+    },
+    { 'echasnovski/mini.nvim', version = false },
+
+    {
+      "HakonHarnes/img-clip.nvim",
+      event = "VeryLazy",
+      opts = {
+        filetypes = {
+          codecompanion = {
+            prompt_for_file_name = false,
+            template = "[Image]($FILE_PATH)",
+            use_absolute_path = true,
+          },
+        },
+      },
+      keys = {
+        -- suggested keymap
+        { "<localleader>p", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+      },
+    },
+    {'dense-analysis/ale'},
+    {'psf/black', branch = 'stable', enabled=false, ft = {'python'}},
+    {'preservim/nerdcommenter'},
+    {'vim-airline/vim-airline-themes'},
+    {'fisadev/vim-isort', ft = {'python'}},
+    {'SirVer/ultisnips'},
+    {'honza/vim-snippets'},
+    {
+      'dcampos/nvim-snippy',
+      enabled=false,
+      opts = {
+        mappings = {
+          is = {
+            ['<Tab>'] = 'expand_or_advance',
+            ['<S-Tab>'] = 'previous',
+          },
+          nx = {
+            ['<leader>x'] = 'cut_text',
+          },
+        },
+      }
+    },
+    {'wesQ3/vim-windowswap'},
+    {'majutsushi/tagbar'},
+    {'craigemery/vim-autotag'},
+
+  },
+  -- Configure any other settings here. See the documentation for more details.
+  -- colorscheme that will be used when installing plugins.
+  install = { colorscheme = { "gruvbox" } },
+  -- automatically check for plugin updates
+  checker = { enabled = true },
+})
 
 
 -- ==========================================================
 -- Basic Settings
 -- ==========================================================
-vim.g.mapleader = ","
-
 vim.cmd [[ cnoremap <C-p> <Up> ]]
 vim.cmd [[ cnoremap <C-n> <Down> ]]
 
@@ -70,7 +284,6 @@ vim.api.nvim_win_set_option(0, 'number', true)  -- Display line numbers
 vim.api.nvim_win_set_option(0, 'title', true)  -- show title in console title bar
 vim.api.nvim_win_set_option(0, 'wildmenu', true)  -- Menu completion in command mode on <Tab>
 vim.api.nvim_win_set_option(0, 'wildmode', 'full')  -- <Tab> cycles between all matching choices.
-
 vim.api.nvim_win_set_option(0, 'cursorline', true)  -- have a line indicate the cursor location
 vim.api.nvim_win_set_option(0, 'ruler', true)  -- show the cursor position all the time
 vim.api.nvim_win_set_option(0, 'virtualedit', 'block')  -- Let cursor move past the last char in <C-v> mode
@@ -114,12 +327,12 @@ vim.api.nvim_set_keymap('', '<leader>p', '"+p', {})
 vim.api.nvim_set_keymap('', '<leader>P', '"+P', {})
 vim.api.nvim_set_keymap('', '<leader>y', '"+y', {})
 
+-- quit and reload
 vim.cmd [[ nnoremap <leader>q :q<CR> ]]
 vim.cmd [[ nnoremap <leader>Q :qa!<CR> ]]
 vim.cmd [[ nnoremap <leader>e :e!<CR> ]]
 
 vim.api.nvim_set_keymap('n', '<leader><space>', ':nohlsearch<CR>', { noremap = true, silent = true })
-
 vim.api.nvim_set_keymap('n', '<leader><S>', ':%s/\\s\\+$//<cr>:let @/=\'\'<CR>', { noremap = true})
 
 -- sudo write this
@@ -139,7 +352,6 @@ vim.api.nvim_set_keymap('', '<c-j>', '<c-w>j', {})
 vim.api.nvim_set_keymap('', '<c-k>', '<c-w>k', {})
 vim.api.nvim_set_keymap('', '<c-l>', '<c-w>l', {})
 vim.api.nvim_set_keymap('', '<c-h>', '<c-w>h', {})
-
 vim.api.nvim_set_keymap('i', '<C-W>', '<C-O><C-W>', {})
 
 -- navigate between tabs
@@ -152,19 +364,15 @@ vim.api.nvim_set_option('background', 'dark')
 vim.cmd [[ colorscheme gruvbox ]]
 vim.cmd [[ hi DiffText gui=underline guibg=red guifg=black ]]
 
-
 -- Providers
-vim.g.python3_host_prog = '/usr/local/bin/python3.12'
-
+vim.g.python3_host_prog = '/usr/bin/python3'
 
 -- abbreviations
-
 vim.cmd [[ cnoreabbrev ntf NvimTreeFindFile ]]
 
 -- =======
 -- PLUGINS
 -- =======
-
 -- NvimTree
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
@@ -172,31 +380,6 @@ vim.opt.termguicolors = true
 vim.api.nvim_set_keymap('', '<C-n>', ':NvimTreeToggle<CR>', {})
 
 -- Telescope
-require('telescope').setup({
-  defaults = {
-    mappings = {
-      n = {
-    	  ['d'] = require('telescope.actions').delete_buffer
-      }
-    } -- mappings
-  },
-  pickers = {
-    grep_string = {
-      theme = "dropdown",
-      layout_config={width=0.8}
-    },
-    live_grep = {
-      theme = "dropdown",
-      layout_config={width=0.8}
-    },
-    find_files = {
-      layout_config={width=0.8}
-    },
-    buffers = {
-      layout_config={width=0.8}
-    },
-  }
-})
 local telescope_builtin = require('telescope.builtin')
 vim.keymap.set('n', '<C-p>', telescope_builtin.find_files, { desc = 'Telescope find files' })
 vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep, { desc = 'Telescope live grep' })
@@ -213,31 +396,15 @@ vim.g['jedi#completions_enabled'] = 1
 vim.g.ale_sign_column_always = 1
 vim.g.ale_virtualtext_cursor = 0
 vim.g.ale_linters = {
-    python= {'pylint', 'pyright'},
-    sh = {'language-server'}
+  python = {'pylint', 'pyright'},
+  sh = {'language-server'}
 }
 
 -- black
 vim.api.nvim_set_keymap('n', '<leader>b', ':Black<CR>', { noremap = true })
 
-
--- bash
-require 'lspconfig'.bashls.setup {}
-
-
--- snippy
-
-require('snippy').setup({
-    mappings = {
-        is = {
-            ['<C-Tab>'] = 'expand_or_advance',
-            ['<S-Tab>'] = 'previous',
-        },
-        nx = {
-            ['<leader>x'] = 'cut_text',
-        },
-    },
-})
+-- CodeCompanion
+vim.api.nvim_set_keymap('n', '<leader>ct', ':CodeCompanionChat toggle<CR>', { noremap = true })
 
 -- windowswap
 vim.g.windowswap_map_keys = 0  -- prevent default bindings
@@ -256,7 +423,17 @@ vim.g.airline_section_z = ''
 -- autoimport
 vim.keymap.set("n", "<leader>a", require("lspimport").import, { noremap = true })
 
+-- autocmds
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "markdown", "codecompanion" },
+    callback = function()
+        vim.treesitter.start()
+    end,
+})
+
 -- tagbar
 vim.api.nvim_set_keymap('n', '<F8>', ':TagbarToggle<CR>', { noremap = true })
 vim.g.tagbar_position = 'rightbelow vertical'
 
+-- lsp-config
+vim.lsp.enable('bashls')
