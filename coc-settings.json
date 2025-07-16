@@ -1,0 +1,21 @@
+// vim: set tabstop=2 shiftwidth=2 foldmethod=marker:
+{
+  // Global {{{
+  "coc.source.around.enable": false,
+  "coc.source.file.enable": false,
+  "suggest.noselect": false,
+  "suggest.removeDuplicateItems": true,
+  "coc.preferences.jumpCommand": "vsplit",
+  "diagnostic.checkCurrentLine": false,
+  "diagnostic.messageTarget": "float",
+
+
+
+
+  // }}}
+  // Python {{{
+  "[python]": {
+    "inlayHint.enable": false,
+    "inlayHint.enableParameter": false
+  }
+}

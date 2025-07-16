@@ -90,7 +90,12 @@ require("lazy").setup({
     },
     {
       'davidhalter/jedi-vim',
+      enabled=false,
       ft = { 'python' },
+    },
+    {
+      'neoclide/coc.nvim',
+      branch='release',
     },
     {'airblade/vim-gitgutter'},
     {'tpope/vim-fugitive'},
@@ -282,12 +287,13 @@ require("lazy").setup({
     {'wesQ3/vim-windowswap'},
     {'majutsushi/tagbar'},
     {'craigemery/vim-autotag'},
+
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "gruvbox" } },
   -- automatically check for plugin updates
-  checker = { enabled = true },
+  checker = { enabled = true, notify = false },
 })
 
 
@@ -408,6 +414,7 @@ vim.g['jedi#usages_command'] = '<leader>u'
 vim.g['jedi#use_splits_not_buffers'] = 'left'
 vim.g['jedi#smart_auto_mappings'] = 1
 vim.g['jedi#completions_enabled'] = 1
+vim.g['jedi#goto_definitions_command'] = "<leader>d"
 
 -- ale
 vim.g.ale_sign_column_always = 1
@@ -480,6 +487,20 @@ vim.api.nvim_create_autocmd("FileType", {
     pattern = { "markdown", "codecompanion" },
     callback = function()
         vim.treesitter.start()
+    end,
+})
+
+-- coc
+vim.keymap.set("n", "<leader>d", "<Plug>(coc-definition)", {silent = true})
+vim.keymap.set("n", "<leader>u", "<Plug>(coc-references)", {silent = true})
+vim.keymap.set("n", "<leader>r", "<Plug>(coc-rename)", {silent = true})
+vim.keymap.set("i", "<c-space>", "coc#refresh()", {silent = true, noremap = true, expr=true})
+vim.keymap.set("i", "<cr>", 'coc#pum#visible() ? coc#pum#confirm() : "<CR>"', {silent = true, noremap = true, expr=true})
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "python" },
+    callback = function()
+        vim.b.coc_root_patterns = {'.git', '.env', 'venv', '.venv', 'setup.cfg', 'setup.py', 'pyproject.toml', 'pyrightconfig.json'}
     end,
 })
 
