@@ -25,6 +25,10 @@ vim.opt.rtp:prepend(lazypath)
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
+    {
+        'nvim-lualine/lualine.nvim',
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+    },
     {'morhetz/gruvbox'},
     {'nvim-tree/nvim-web-devicons'},
     {'nvim-lua/plenary.nvim'},
@@ -92,10 +96,24 @@ require("lazy").setup({
     {'tpope/vim-fugitive'},
     {'stevanmilic/nvim-lspimport'},
     {'neovim/nvim-lspconfig'},
-    {'github/copilot.vim'},
+    {'github/copilot.vim', enabled=false},
     {
       "olimorris/codecompanion.nvim",
       opts = {
+        strategies = {
+          chat = {
+            keymaps = {
+              completion = {
+                modes = {
+                  i = "<C-space>",
+                },
+                index = 1,
+                callback = "keymaps.completion",
+                description = "Completion Menu",
+              },
+            },
+          },
+        },
         extensions = {
           mcphub = {
             callback = "mcphub.extensions.codecompanion",
@@ -197,6 +215,7 @@ require("lazy").setup({
         "nvim-treesitter/nvim-treesitter",
         "ravitemer/codecompanion-history.nvim",
         "MeanderingProgrammer/render-markdown.nvim",
+        "franco-ruggeri/codecompanion-spinner.nvim",
       },
     },
     {
@@ -221,7 +240,6 @@ require("lazy").setup({
       opts = {}
     },
     { 'echasnovski/mini.nvim', version = false },
-
     {
       "HakonHarnes/img-clip.nvim",
       event = "VeryLazy",
@@ -264,7 +282,6 @@ require("lazy").setup({
     {'wesQ3/vim-windowswap'},
     {'majutsushi/tagbar'},
     {'craigemery/vim-autotag'},
-
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
@@ -405,6 +422,41 @@ vim.api.nvim_set_keymap('n', '<leader>b', ':Black<CR>', { noremap = true })
 
 -- CodeCompanion
 vim.api.nvim_set_keymap('n', '<leader>ct', ':CodeCompanionChat toggle<CR>', { noremap = true })
+
+require("codecompanion").setup({
+  adapters = {
+    qwen3 = function()
+      return require("codecompanion.adapters").extend("ollama", {
+        name = "qwen3", -- Give this adapter a different name to differentiate it from the default ollama adapter
+        schema = {
+          model = {
+            default = "qwen3:8b",
+          },
+          num_ctx = {
+            default = 40000,
+          },
+          num_predict = {
+            default = -1,
+          },
+        },
+      })
+    end,
+  },
+  strategies = {
+    chat = {
+      adapter = "qwen3",
+    },
+    inline = {
+      adapter = "qwen3",
+    },
+    cmd = {
+      adapter = "qwen3",
+    },
+  },
+})
+
+-- lualine
+require('lualine').setup()
 
 -- windowswap
 vim.g.windowswap_map_keys = 0  -- prevent default bindings
