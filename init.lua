@@ -396,25 +396,13 @@ vim.cmd [[ cnoreabbrev ntf NvimTreeFindFile ]]
 -- =======
 -- PLUGINS
 -- =======
--- NvimTree
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-vim.opt.termguicolors = true
-vim.api.nvim_set_keymap('', '<C-n>', ':NvimTreeToggle<CR>', {})
-
--- Telescope
-local telescope_builtin = require('telescope.builtin')
-vim.keymap.set('n', '<C-p>', telescope_builtin.find_files, { desc = 'Telescope find files' })
-vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep, { desc = 'Telescope live grep' })
-vim.keymap.set('n', '<leader>ff', telescope_builtin.grep_string, { desc = 'Telescope grep string under cursor' })
-vim.keymap.set('n', '<leader>fb', telescope_builtin.buffers, { desc = 'Telescope buffers' })
-
--- jedi-vim
-vim.g['jedi#usages_command'] = '<leader>u'
-vim.g['jedi#use_splits_not_buffers'] = 'left'
-vim.g['jedi#smart_auto_mappings'] = 1
-vim.g['jedi#completions_enabled'] = 1
-vim.g['jedi#goto_definitions_command'] = "<leader>d"
+-- airline
+vim.g.airline_theme = 'bubblegum'
+vim.g.airline_powerline_fonts = 1
+vim.g.airline_extensions = {'branch'}
+vim.g.airline_section_x = ''
+vim.g.airline_section_y = ''
+vim.g.airline_section_z = ''
 
 -- ale
 vim.g.ale_sign_column_always = 1
@@ -424,8 +412,33 @@ vim.g.ale_linters = {
   sh = {'language-server'}
 }
 
+-- autocmds
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "markdown", "codecompanion" },
+    callback = function()
+        vim.treesitter.start()
+    end,
+})
+
+-- autoimport
+vim.keymap.set("n", "<leader>a", require("lspimport").import, { noremap = true })
+
 -- black
 vim.api.nvim_set_keymap('n', '<leader>b', ':Black<CR>', { noremap = true })
+
+-- coc
+vim.keymap.set("n", "<leader>d", "<Plug>(coc-definition)", {silent = true})
+vim.keymap.set("n", "<leader>u", "<Plug>(coc-references)", {silent = true})
+vim.keymap.set("n", "<leader>r", "<Plug>(coc-rename)", {silent = true})
+vim.keymap.set("i", "<c-space>", "coc#refresh()", {silent = true, noremap = true, expr=true})
+vim.keymap.set("i", "<cr>", 'coc#pum#visible() ? coc#pum#confirm() : "<CR>"', {silent = true, noremap = true, expr=true})
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "python" },
+    callback = function()
+        vim.b.coc_root_patterns = {'.git', '.env', 'venv', '.venv', 'setup.cfg', 'setup.py', 'pyproject.toml', 'pyrightconfig.json'}
+    end,
+})
 
 -- CodeCompanion
 vim.api.nvim_set_keymap('n', '<leader>ct', ':CodeCompanionChat toggle<CR>', { noremap = true })
@@ -462,51 +475,38 @@ require("codecompanion").setup({
   },
 })
 
+-- jedi-vim
+vim.g['jedi#usages_command'] = '<leader>u'
+vim.g['jedi#use_splits_not_buffers'] = 'left'
+vim.g['jedi#smart_auto_mappings'] = 1
+vim.g['jedi#completions_enabled'] = 1
+vim.g['jedi#goto_definitions_command'] = "<leader>d"
+
+-- lsp-config
+vim.lsp.enable('bashls')
+
 -- lualine
 require('lualine').setup()
+
+-- NvimTree
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.opt.termguicolors = true
+vim.api.nvim_set_keymap('', '<C-n>', ':NvimTreeToggle<CR>', {})
+
+-- tagbar
+vim.api.nvim_set_keymap('n', '<F8>', ':TagbarToggle<CR>', { noremap = true })
+vim.g.tagbar_position = 'rightbelow vertical'
+
+-- Telescope
+local telescope_builtin = require('telescope.builtin')
+vim.keymap.set('n', '<C-p>', telescope_builtin.find_files, { desc = 'Telescope find files' })
+vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep, { desc = 'Telescope live grep' })
+vim.keymap.set('n', '<leader>ff', telescope_builtin.grep_string, { desc = 'Telescope grep string under cursor' })
+vim.keymap.set('n', '<leader>fb', telescope_builtin.buffers, { desc = 'Telescope buffers' })
 
 -- windowswap
 vim.g.windowswap_map_keys = 0  -- prevent default bindings
 vim.api.nvim_set_keymap('n', '<leader>yw', ':call WindowSwap#MarkWindowSwap()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>pw', ':call WindowSwap#DoWindowSwap()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>ww', ':call WindowSwap#EasyWindowSwap()<CR>', { noremap = true, silent = true })
-
--- airline
-vim.g.airline_theme = 'bubblegum'
-vim.g.airline_powerline_fonts = 1
-vim.g.airline_extensions = {'branch'}
-vim.g.airline_section_x = ''
-vim.g.airline_section_y = ''
-vim.g.airline_section_z = ''
-
--- autoimport
-vim.keymap.set("n", "<leader>a", require("lspimport").import, { noremap = true })
-
--- autocmds
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "markdown", "codecompanion" },
-    callback = function()
-        vim.treesitter.start()
-    end,
-})
-
--- coc
-vim.keymap.set("n", "<leader>d", "<Plug>(coc-definition)", {silent = true})
-vim.keymap.set("n", "<leader>u", "<Plug>(coc-references)", {silent = true})
-vim.keymap.set("n", "<leader>r", "<Plug>(coc-rename)", {silent = true})
-vim.keymap.set("i", "<c-space>", "coc#refresh()", {silent = true, noremap = true, expr=true})
-vim.keymap.set("i", "<cr>", 'coc#pum#visible() ? coc#pum#confirm() : "<CR>"', {silent = true, noremap = true, expr=true})
-
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "python" },
-    callback = function()
-        vim.b.coc_root_patterns = {'.git', '.env', 'venv', '.venv', 'setup.cfg', 'setup.py', 'pyproject.toml', 'pyrightconfig.json'}
-    end,
-})
-
--- tagbar
-vim.api.nvim_set_keymap('n', '<F8>', ':TagbarToggle<CR>', { noremap = true })
-vim.g.tagbar_position = 'rightbelow vertical'
-
--- lsp-config
-vim.lsp.enable('bashls')
