@@ -28,6 +28,16 @@ require("lazy").setup({
     {
         'nvim-lualine/lualine.nvim',
         dependencies = { 'nvim-tree/nvim-web-devicons' },
+        opts = {
+          sections = {
+            lualine_b = {{'filename', path=4}},
+            lualine_c = {},
+          },
+          inactive_sections = {
+            lualine_b = {{'filename', path=4}},
+            lualine_c = {},
+          },
+        },
     },
     {'morhetz/gruvbox'},
     {'nvim-tree/nvim-web-devicons'},
@@ -420,6 +430,29 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "lua" },
+    callback = function()
+        vim.api.nvim_win_set_option(0, 'tabstop', 2)
+        vim.api.nvim_win_set_option(0, 'shiftwidth', 2)
+        vim.api.nvim_win_set_option(0, 'softtabstop', 2)
+    end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "python" },
+    callback = function()
+        vim.b.coc_root_patterns = {'.git', '.env', 'venv', '.venv', 'setup.cfg', 'setup.py', 'pyproject.toml', 'pyrightconfig.json'}
+    end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "gitcommit" },
+    callback = function()
+        vim.api.nvim_win_set_option(0, 'colorcolumn', '70')
+    end,
+})
+
 -- autoimport
 vim.keymap.set("n", "<leader>a", require("lspimport").import, { noremap = true })
 
@@ -433,27 +466,65 @@ vim.keymap.set("n", "<leader>r", "<Plug>(coc-rename)", {silent = true})
 vim.keymap.set("i", "<c-space>", "coc#refresh()", {silent = true, noremap = true, expr=true})
 vim.keymap.set("i", "<cr>", 'coc#pum#visible() ? coc#pum#confirm() : "<CR>"', {silent = true, noremap = true, expr=true})
 
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "python" },
-    callback = function()
-        vim.b.coc_root_patterns = {'.git', '.env', 'venv', '.venv', 'setup.cfg', 'setup.py', 'pyproject.toml', 'pyrightconfig.json'}
-    end,
-})
-
 -- CodeCompanion
 vim.api.nvim_set_keymap('n', '<leader>ct', ':CodeCompanionChat toggle<CR>', { noremap = true })
 
 require("codecompanion").setup({
   adapters = {
-    qwen3 = function()
+    granite = function()
       return require("codecompanion.adapters").extend("ollama", {
-        name = "qwen3", -- Give this adapter a different name to differentiate it from the default ollama adapter
         schema = {
           model = {
-            default = "qwen3:8b",
+            default = "granite-code:3b",
+            choices = {
+              "granite-code:3b",
+            },
+          },
+          num_ctx = {
+            default = 125000,
+          },
+          num_predict = {
+            default = -1,
+          },
+        },
+      })
+    end,
+    qwen = function()
+      return require("codecompanion.adapters").extend("ollama", {
+        schema = {
+          model = {
+            default = "qwen3:1.7b",
+            choices = {
+              "qwen3:1.7b",
+              "qwen2.5-coder:3b",
+              "codeqwen:7b"
+            },
           },
           num_ctx = {
             default = 40000,
+            ["1.7b"] = 40000,
+            ["qwen3:1.7b"] = 40000,
+            ["3b"] = 32000,
+            ["qwen2.5-coder:3b"] = 32000,
+            ["codeqwen:7b"] = 64000,
+          },
+          num_predict = {
+            default = -1,
+          },
+        },
+      })
+    end,
+    deepseek = function()
+      return require("codecompanion.adapters").extend("ollama", {
+        schema = {
+          model = {
+            default = "deepseek-coder-v2:16b",
+            choices = {
+              "deepseek-coder-v2:16b",
+            },
+          },
+          num_ctx = {
+            default = 160000,
           },
           num_predict = {
             default = -1,
@@ -464,13 +535,13 @@ require("codecompanion").setup({
   },
   strategies = {
     chat = {
-      adapter = "qwen3",
+      adapter = "qwen",
     },
     inline = {
-      adapter = "qwen3",
+      adapter = "qwen",
     },
     cmd = {
-      adapter = "qwen3",
+      adapter = "qwen",
     },
   },
 })
