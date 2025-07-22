@@ -113,6 +113,66 @@ require("lazy").setup({
     {'neovim/nvim-lspconfig'},
     {'github/copilot.vim', enabled=false},
     {
+      'milanglacier/minuet-ai.nvim',
+      opts={
+        provider = 'openai_compatible',
+        --notify = 'debug',
+        n_completions = 1, -- recommend for local model for resource saving
+        -- I recommend beginning with a small context window size and incrementally
+        -- expanding it, depending on your local computing power. A context window
+        -- of 512, serves as an good starting point to estimate your computing
+        -- power. Once you have a reliable estimate of your local computing power,
+        -- you should adjust the context window to a larger value.
+        context_window = 512,
+        provider_options = {
+          openai_compatible = {
+            -- For Windows users, TERM may not be present in environment variables.
+            -- Consider using APPDATA instead.
+            api_key = 'TERM',
+            name = 'Ollama',
+            end_point = 'http://localhost:11434/v1/chat/completions',
+            model = 'qwen2.5-coder:1.5b',
+            optional = {
+              max_tokens = 56,
+              top_p = 0.9,
+            },
+          },
+        },
+
+        lsp = {
+          enabled_ft = {"pytyhon"},
+        },
+        cmp = {
+          enable_auto_complete = false,
+        },
+        blink = {
+          enable_auto_complete = false,
+        },
+        virtualtext = {
+          -- Specify the filetypes to enable automatic virtual text completion,
+          -- e.g., { 'python', 'lua' }. Note that you can still invoke manual
+          -- completion even if the filetype is not on your auto_trigger_ft list.
+          auto_trigger_ft = {"python", "bash", "sh", "lua"},
+          enable_auto_complete = true,
+          keymap = {
+            accept = "<S-Tab>",
+            --accept_line = "<C-Tab>",
+            --accept_n_lines = "<S-Tab>",
+            -- Cycle to next completion item, or manually invoke completion
+            next = "<A-]>",
+            -- Cycle to prev completion item, or manually invoke completion
+            prev = "<A-[>",
+            dismiss = "<A-e>",
+          },
+          -- Whether show virtual text suggestion when the completion menu
+          -- (nvim-cmp or blink-cmp) is visible.
+          show_on_completion_menu = false,
+        },
+        request_timeout = 3,
+        --debounce = 1000;
+      }
+    },
+    {
       "olimorris/codecompanion.nvim",
       opts = {
         strategies = {
