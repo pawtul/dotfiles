@@ -63,9 +63,11 @@ require("lazy").setup({
     {
       "nvim-treesitter/nvim-treesitter",
       branch = 'master',
-      lazy = false,
       build = ":TSUpdate",
-      ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "bash", },
+      ensure_installed = {
+        "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline",
+        "python", "bash", "sh", "gitcommit"
+      },
       --auto_install = false,
     },
     {
@@ -114,8 +116,9 @@ require("lazy").setup({
     {'github/copilot.vim', enabled=false},
     {
       'milanglacier/minuet-ai.nvim',
+      enabled=false,
       opts={
-        provider = 'openai_compatible',
+        provider = 'copilot',
         --notify = 'debug',
         n_completions = 1, -- recommend for local model for resource saving
         -- I recommend beginning with a small context window size and incrementally
@@ -123,24 +126,10 @@ require("lazy").setup({
         -- of 512, serves as an good starting point to estimate your computing
         -- power. Once you have a reliable estimate of your local computing power,
         -- you should adjust the context window to a larger value.
-        context_window = 512,
-        provider_options = {
-          openai_compatible = {
-            -- For Windows users, TERM may not be present in environment variables.
-            -- Consider using APPDATA instead.
-            api_key = 'TERM',
-            name = 'Ollama',
-            end_point = 'http://localhost:11434/v1/chat/completions',
-            model = 'qwen2.5-coder:1.5b',
-            optional = {
-              max_tokens = 56,
-              top_p = 0.9,
-            },
-          },
-        },
+        context_window = 4096,
 
         lsp = {
-          enabled_ft = {"pytyhon"},
+          enabled_ft = {"python", "bash"},
         },
         cmp = {
           enable_auto_complete = false,
@@ -155,9 +144,9 @@ require("lazy").setup({
           auto_trigger_ft = {"python", "bash", "sh", "lua"},
           enable_auto_complete = true,
           keymap = {
-            accept = "<S-Tab>",
-            --accept_line = "<C-Tab>",
-            --accept_n_lines = "<S-Tab>",
+            accept = "<A-s>",
+            accept_line = "<A-l>",
+            accept_n_lines = "<A-n>",
             -- Cycle to next completion item, or manually invoke completion
             next = "<A-]>",
             -- Cycle to prev completion item, or manually invoke completion
@@ -168,122 +157,32 @@ require("lazy").setup({
           -- (nvim-cmp or blink-cmp) is visible.
           show_on_completion_menu = false,
         },
-        request_timeout = 3,
+        request_timeout = 2,
         --debounce = 1000;
       }
     },
     {
+      "Davidyz/VectorCode",
+      version = "*",
+      build = "uv tool upgrade vectorcode", -- This helps keeping the CLI up-to-date
+      dependencies = { "nvim-lua/plenary.nvim" },
+    },
+    {"ravitemer/codecompanion-history.nvim"},
+    {
       "olimorris/codecompanion.nvim",
       opts = {
-        strategies = {
-          chat = {
-            keymaps = {
-              completion = {
-                modes = {
-                  i = "<C-space>",
-                },
-                index = 1,
-                callback = "keymaps.completion",
-                description = "Completion Menu",
+        chat = {
+          keymaps = {
+            completion = {
+              modes = {
+                i = "<C-space>",
               },
+              index = 1,
+              callback = "keymaps.completion",
+              description = "Completion Menu",
             },
           },
         },
-        extensions = {
-          mcphub = {
-            callback = "mcphub.extensions.codecompanion",
-            opts = {
-              make_vars = true,
-              make_slash_commands = true,
-              show_result_in_chat = true
-            }
-          },
-
-          history = {
-            enabled = true,
-            opts = {
-              -- Keymap to open history from chat buffer (default: gh)
-              keymap = "gh",
-              -- Keymap to save the current chat manually (when auto_save is disabled)
-              save_chat_keymap = "sc",
-              -- Save all chats by default (disable to save only manually using 'sc')
-              auto_save = true,
-              -- Number of days after which chats are automatically deleted (0 to disable)
-              expiration_days = 0,
-              -- Picker interface (auto resolved to a valid picker)
-              picker = "telescope", --- ("telescope", "snacks", "fzf-lua", or "default")
-              ---Optional filter function to control which chats are shown when browsing
-              chat_filter = nil, -- function(chat_data) return boolean end
-              -- Customize picker keymaps (optional)
-              picker_keymaps = {
-                  rename = { n = "r", i = "<M-r>" },
-                  delete = { n = "d", i = "<M-d>" },
-                  duplicate = { n = "<C-y>", i = "<C-y>" },
-              },
-              ---Automatically generate titles for new chats
-              auto_generate_title = true,
-              title_generation_opts = {
-                ---Adapter for generating titles (defaults to current chat adapter)
-                adapter = nil, -- "copilot"
-                ---Model for generating titles (defaults to current chat model)
-                model = nil, -- "gpt-4o"
-                ---Number of user prompts after which to refresh the title (0 to disable)
-                refresh_every_n_prompts = 0, -- e.g., 3 to refresh after every 3rd user prompt
-                ---Maximum number of times to refresh the title (default: 3)
-                max_refreshes = 3,
-                format_title = function(original_title)
-                    -- this can be a custom function that applies some custom
-                    -- formatting to the title.
-                    return original_title
-                end
-              },
-              ---On exiting and entering neovim, loads the last chat on opening chat
-              continue_last_chat = false,
-              ---When chat is cleared with `gx` delete the chat from history
-              delete_on_clearing_chat = false,
-              ---Directory path to save the chats
-              dir_to_save = vim.fn.stdpath("data") .. "/codecompanion-history",
-              ---Enable detailed logging for history extension
-              enable_logging = false,
-
-              -- Summary system
-              summary = {
-                -- Keymap to generate summary for current chat (default: "gcs")
-                create_summary_keymap = "gcs",
-                -- Keymap to browse summaries (default: "gbs")
-                browse_summaries_keymap = "gbs",
-               
-                generation_opts = {
-                  adapter = nil, -- defaults to current chat adapter
-                  model = nil, -- defaults to current chat model
-                  context_size = 90000, -- max tokens that the model supports
-                  include_references = true, -- include slash command content
-                  include_tool_outputs = true, -- include tool execution results
-                  system_prompt = nil, -- custom system prompt (string or function)
-                  format_summary = nil, -- custom function to format generated summary e.g to remove <think/> tags from summary
-                },
-              },
-             
-              -- Memory system (requires VectorCode CLI)
-              memory = {
-                -- Automatically index summaries when they are generated
-                auto_create_memories_on_summary_generation = true,
-                -- Path to the VectorCode executable
-                vectorcode_exe = "vectorcode",
-                -- Tool configuration
-                tool_opts = {
-                    -- Default number of memories to retrieve
-                    default_num = 10
-                },
-                -- Enable notifications for indexing progress
-                notify = true,
-                -- Index all existing memories on startup
-                -- (requires VectorCode 0.6.12+ for efficient incremental indexing)
-                index_on_startup = false,
-              },
-            }
-          },
-        }
       },
       dependencies = {
         "nvim-lua/plenary.nvim",
@@ -291,13 +190,8 @@ require("lazy").setup({
         "ravitemer/codecompanion-history.nvim",
         "MeanderingProgrammer/render-markdown.nvim",
         "franco-ruggeri/codecompanion-spinner.nvim",
+        "Davidyz/VectorCode",
       },
-    },
-    {
-      "Davidyz/VectorCode",
-      version = "*", -- optional, depending on whether you're on nightly or release
-      dependencies = { "nvim-lua/plenary.nvim" },
-      cmd = "VectorCode", -- if you're lazy-loading VectorCode
     },
     {
       "MeanderingProgrammer/render-markdown.nvim", -- Enhanced markdown rendering
@@ -337,11 +231,10 @@ require("lazy").setup({
     {'preservim/nerdcommenter'},
     {'vim-airline/vim-airline-themes'},
     {'fisadev/vim-isort', ft = {'python'}},
-    {'SirVer/ultisnips'},
+    {'SirVer/ultisnips', enbled=false},
     {'honza/vim-snippets'},
     {
       'dcampos/nvim-snippy',
-      enabled=false,
       opts = {
         mappings = {
           is = {
@@ -462,6 +355,7 @@ vim.g.python3_host_prog = '/usr/bin/python3'
 
 -- abbreviations
 vim.cmd [[ cnoreabbrev ntf NvimTreeFindFile ]]
+--vim.cmd [[ cnoreabbrev ntf NvimTreeFocus ]]
 
 -- =======
 -- PLUGINS
@@ -503,13 +397,14 @@ vim.api.nvim_create_autocmd("FileType", {
     pattern = { "python" },
     callback = function()
         vim.b.coc_root_patterns = {'.git', '.env', 'venv', '.venv', 'setup.cfg', 'setup.py', 'pyproject.toml', 'pyrightconfig.json'}
+        --vim.cmd [[ silent! CocDisable ]]
     end,
 })
 
 vim.api.nvim_create_autocmd("FileType", {
     pattern = { "gitcommit" },
     callback = function()
-        vim.api.nvim_win_set_option(0, 'colorcolumn', '70')
+        vim.api.nvim_set_option_value('colorcolumn', '50,70', {})
     end,
 })
 
@@ -530,78 +425,46 @@ vim.keymap.set("i", "<cr>", 'coc#pum#visible() ? coc#pum#confirm() : "<CR>"', {s
 vim.api.nvim_set_keymap('n', '<leader>ct', ':CodeCompanionChat toggle<CR>', { noremap = true })
 
 require("codecompanion").setup({
-  adapters = {
-    granite = function()
-      return require("codecompanion.adapters").extend("ollama", {
-        schema = {
-          model = {
-            default = "granite-code:3b",
-            choices = {
-              "granite-code:3b",
-            },
-          },
-          num_ctx = {
-            default = 125000,
-          },
-          num_predict = {
-            default = -1,
-          },
-        },
-      })
-    end,
-    qwen = function()
-      return require("codecompanion.adapters").extend("ollama", {
-        schema = {
-          model = {
-            default = "qwen3:1.7b",
-            choices = {
-              "qwen3:1.7b",
-              "qwen2.5-coder:3b",
-              "codeqwen:7b"
-            },
-          },
-          num_ctx = {
-            default = 40000,
-            ["1.7b"] = 40000,
-            ["qwen3:1.7b"] = 40000,
-            ["3b"] = 32000,
-            ["qwen2.5-coder:3b"] = 32000,
-            ["codeqwen:7b"] = 64000,
-          },
-          num_predict = {
-            default = -1,
-          },
-        },
-      })
-    end,
-    deepseek = function()
-      return require("codecompanion.adapters").extend("ollama", {
-        schema = {
-          model = {
-            default = "deepseek-coder-v2:16b",
-            choices = {
-              "deepseek-coder-v2:16b",
-            },
-          },
-          num_ctx = {
-            default = 160000,
-          },
-          num_predict = {
-            default = -1,
-          },
-        },
-      })
-    end,
+  extensions = {
+    mcphub = {
+      callback = "mcphub.extensions.codecompanion",
+      opts = {
+        make_vars = true,
+        make_slash_commands = true,
+        show_result_in_chat = true
+      }
+    },
+
+    history = {
+      enabled = true,
+      opts = {
+        -- Picker interface (auto resolved to a valid picker)
+        picker = "telescope", --- ("telescope", "snacks", "fzf-lua", or "default")
+        ---Enable detailed logging for history extension
+        enable_logging = true,
+      }
+    },
+    vectorcode = {},
   },
   strategies = {
     chat = {
-      adapter = "qwen",
+      adapter = "copilot",
+      keymaps = {
+        completion = {
+          modes = {
+            i = "<C-space>",
+          },
+          index = 1,
+          callback = "keymaps.completion",
+          description = "Completion Menu",
+        },
+      },
     },
     inline = {
-      adapter = "qwen",
+      adapter = "copilot",
     },
     cmd = {
-      adapter = "qwen",
+      adapter = "copilot",
     },
   },
 })
